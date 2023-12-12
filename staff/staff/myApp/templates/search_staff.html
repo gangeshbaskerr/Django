@@ -1,0 +1,22 @@
+<!-- staff/templates/search_staff.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Search Staff</h2>
+<form method="post" action="{% url 'search_staff' %}">
+    {% csrf_token %}
+    <label for="department">Department:</label>
+    <input type="text" name="department" required>
+    <label for="name">Name:</label>
+    <input type="text" name="name">
+    <button type="submit">Search</button>
+</form>
+{% if staff_list %}
+<h3>Staff List</h3>
+<ul>
+    {% for staff in staff_list %}
+    <li>{{ staff.name }} - {{ staff.department }} - <a href="{% url 'delete_staff' staff.staff_id %}">Delete</a> - <a href="{% url 'update_staff' staff.staff_id %}">Update</a></li>
+    {% endfor %}
+</ul>
+{% endif %}
+{% endblock %}

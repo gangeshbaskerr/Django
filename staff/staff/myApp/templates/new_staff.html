@@ -1,0 +1,11 @@
+<!-- staff/templates/new_staff.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>New Staff</h2>
+<form method="post" action="">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Add Staff</button>
+</form>
+{% endblock %}
