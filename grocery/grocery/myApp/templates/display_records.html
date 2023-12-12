@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Display Records</title>
+</head>
+<body>
+    <h1>Grocery Records</h1>
+    <ul>
+        {% for grocery in groceries %}
+            <li>{{ grocery.name }} - {{ grocery.type }} - Quantity: {{ grocery.quantity }} - Amount: {{ grocery.amount }}</li>
+        {% endfor %}
+    </ul>
+    <p><a href="/addg">Back</a></p>
+</body>
+</html>
