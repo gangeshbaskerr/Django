@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Car Details</title>
+</head>
+<body>
+{% for d in form %}
+Base price:{{d.base_price}}<br>
+type of vehicle:{{d.type_of_vehicle}}<br>
+no of owners:{{d.number_of_owners}}<br>
+Brand:{{d.brand}}<br>
+model name:{{d.model_name}}<br>
+kilometers:{{d.kilometers}}<br><br>
+
+{% endfor %}
+
+</body>
+</html>
