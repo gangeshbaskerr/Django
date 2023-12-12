@@ -1,0 +1,15 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Amicable Numbers</title>
+</head>
+<body>
+    <h1>Amicable Numbers Results</h1>
+    <ul>
+        {% for pair, result in results %}
+            <li>{{ pair }} - {% if result %}Amicable{% else %}Not Amicable{% endif %}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

@@ -1,0 +1,9 @@
+<html>
+<head>
+    <title>Proper Divisors</title>
+</head>
+<body>
+    <h1>Proper Divisors of {{ number }}</h1>
+    <p>Divisors: {% for divisor in divisors %}{{ divisor }}{% if not forloop.last %}, {% endif %}{% endfor %}</p>
+</body>
+</html>
