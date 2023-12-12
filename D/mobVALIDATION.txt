@@ -1,0 +1,51 @@
+MOBILENUMBER.HTML:
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Mobile NUmber Validation</title>
+</head>
+<body>
+<form action="/ValidateMobile/" method="POST">
+    {% csrf_token %}
+    mobile No: <input type="text" name="mobileTxt" value="{{mobileNo}}">
+    Status: <input type="text" name="statusTxt" value="{{status}}">
+    <input type="submit" value="Validate">
+    <div>
+        <center><p><a href="/home">HOME</a></p></center>
+    </div>
+</form>
+</body>
+</html>
+
+
+VIEWS.PY:
+
+
+from django.shortcuts import render
+from.models import Details
+from django.http import HttpResponse
+from django.template import loader
+
+def ValidateMobile(request):
+    context={}
+    if request.method == "POST":
+        mobilenumber = request.POST['mobileTxt']
+        if len(mobilenumber) == 10:
+            status = 'valid Number'
+        else:
+            status = 'invalid Number'
+        context = {
+            'status': status,
+            'mobileNo': mobilenumber
+        }
+    return render(request, 'mobilenumber/mobilenumber.html', context)
+
+URLS.PY:
+
+from django.urls import path
+from . import views
+urlpatterns = [
+	path('ValidateMobile/', views.ValidateMobile, name='ValidateMobile'),
+]

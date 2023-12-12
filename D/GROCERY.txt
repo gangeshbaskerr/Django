@@ -1,0 +1,99 @@
+ADD_GROCERY.HTML:
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Grocery</title>
+</head>
+<body>
+    <h1>Add Grocery</h1>
+    <form method="post" action="">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Add Grocery">
+    </form>
+</body>
+</html>
+
+DISPLAY_RECORDS.HTML:
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Display Records</title>
+</head>
+<body>
+    <h1>Grocery Records</h1>
+    <ul>
+        {% for grocery in groceries %}
+            <li>{{ grocery.name }} - {{ grocery.type }} - Quantity: {{ grocery.quantity }} - Amount: {{ grocery.amount }}</li>
+        {% endfor %}
+    </ul>
+    <p><a href="/addg">Back</a></p>
+</body>
+</html>
+
+MODELS.PY:
+
+from django.db import models
+
+class Grocery(models.Model):
+    TYPE_CHOICES = [
+        ('Oil', 'Oil'),
+        ('Grains', 'Grains'),
+        ('Cosmetics', 'Cosmetics'),
+    ]
+
+    name = models.CharField(max_length=255)
+    type = models.CharField(max_length=20, choices=TYPE_CHOICES)
+    quantity = models.IntegerField()
+    rate_per_unit = models.DecimalField(max_digits=10, decimal_places=2)
+    amount = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
+
+
+FORMS.PY:
+
+from django import forms
+from .models import Grocery
+
+class GroceryForm(forms.ModelForm):
+    class Meta:
+        model = Grocery
+        exclude = ['amount']
+
+URLS.PY:
+
+from django.urls import path
+from . import views
+urlpatterns = [
+    path('', views.add_grocery,name='home'),
+    path('displayrecords/', views.displayrecords, name='displayrecords'),
+    path('addg/', views.add_grocery,name='add'),
+]
+
+VIEWS.PY:
+
+from django.shortcuts import render, redirect
+from .models import Grocery
+from .forms import GroceryForm
+
+def displayrecords(request):
+    groceries = Grocery.objects.all().values()
+    return render(request,'display_records.html',{'groceries':groceries})
+
+def add_grocery(request):
+    if request.method == 'POST':
+        form = GroceryForm(request.POST)
+        if form.is_valid():
+            grocery = form.save(commit=False)
+            grocery.amount = grocery.quantity * grocery.rate_per_unit
+            grocery.save()
+            return redirect('displayrecords')
+    else:
+        form = GroceryForm()
+    return render(request, 'add_grocery.html',{'form':form})
+

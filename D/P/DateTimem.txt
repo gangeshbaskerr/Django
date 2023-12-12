@@ -1,0 +1,160 @@
+import datetime
+# Get the current date and time
+current_datetime = datetime.datetime.now()
+# Display current date and time
+print("Current Date and Time:", current_datetime)
+# Display current year
+current_year = current_datetime.year
+print("Current Year:", current_year)
+# Display month of the year
+month_of_year = current_datetime.strftime("%B")
+print("Month of Year:", month_of_year)
+# Display week number of the year
+week_number = current_datetime.strftime("%U")
+print("Week Number of the Year:", week_number)
+# Display weekday of the week
+weekday = current_datetime.strftime("%A")
+print("Weekday of the Week:", weekday)
+# Display day of the year
+day_of_year = current_datetime.strftime("%j")
+print("Day of Year:", day_of_year)
+# Display day of the month
+day_of_month = current_datetime.strftime("%d")
+print("Day of Month:", day_of_month)
+# Display day of the week
+day_of_week = current_datetime.strftime("%A")
+print("Day of Week:", day_of_week)
+
+
+
+#leapyear:
+
+def is_leap_year(year):
+	if (year % 4 == 0 and year % 100 != 0) or (year % 400 == 0):
+		return True
+	else:
+		return False
+year=1
+while(year!=0):
+# Input year
+year = int(input("Enter a year: "))
+if is_leap_year(year):
+	print(f"{year} is a leap year.")
+else:
+	print(f"{year} is not a leap year.")
+print()
+
+
+
+#string to date:
+
+from datetime import datetime
+
+def convert_string_to_datetime(sample_string):
+    # Parse the string using the specified format
+    dt_object = datetime.strptime(sample_string, '%b %d %Y %I:%M%p')
+
+    # Format the datetime object as per the expected output
+    formatted_output = dt_object.strftime('%Y-%m-%d %H:%M:%S')
+
+    return formatted_output
+
+# Sample usage
+sample_string = 'Jan 1 2014 2:43PM'
+result = convert_string_to_datetime(sample_string)
+
+print(f"Sample String: {sample_string}")
+print(f"Expected Output: {result}")
+
+#+ or - dates:
+
+from datetime import datetime, timedelta
+# Get the current date
+current_date = datetime.now()
+# Subtract five days
+result_date = current_date - timedelta(days=5)
+# Format and print the result date
+print("Current Date:", current_date.strftime("%Y-%m-%d"))
+print("Date After Subtracting Five Days:", result_date.strftime("%Y-%m-%d"))
+
+
+#yesterday tomo:
+
+from datetime import datetime, timedelta
+# Get the current date
+today = datetime.now()
+# Calculate yesterday and tomorrow
+yesterday = today - timedelta(days=1)
+tomorrow = today + timedelta(days=1)
+# Format and print the dates
+print("Yesterday:", yesterday.strftime("%Y-%m-%d"))
+print("Today:", today.strftime("%Y-%m-%d"))
+print("Tomorrow:", tomorrow.strftime("%Y-%m-%d"))
+
+
+#print next 5 days:
+
+from datetime import datetime, timedelta
+# Get the current date
+current_date = datetime.now()
+# Print the current date
+print("Today:", current_date.strftime("%Y-%m-%d"))
+# Print the next 5 days
+for i in range(1, 6):
+	next_date = current_date + timedelta(days=i)
+	print(f"Day {i}: {next_date.strftime('%Y-%m-%d')}")
+
+#number of days btwn dates :
+
+from datetime import datetime
+# Input two dates as strings
+date_str1 = input("Enter the first date (YYYY-MM-DD): ")
+date_str2 = input("Enter the second date (YYYY-MM-DD): ")
+# Convert the input strings to datetime objects
+date1 = datetime.strptime(date_str1, "%Y-%m-%d")
+date2 = datetime.strptime(date_str2, "%Y-%m-%d")
+# Calculate the difference between the two dates
+date_difference = abs(date2 - date1)
+# Get the number of days as an integer
+days_between = date_difference.days
+# Print the result
+print(f"Number of days between {date_str1} and {date_str2} is {days_between}
+days.")
+
+#difference between dates in months and years:
+
+from datetime import datetime
+
+def months_between_dates(start_date, end_date):
+    start_date = datetime.strptime(start_date, "%Y-%m-%d")
+    end_date = datetime.strptime(end_date, "%Y-%m-%d")
+
+    # Calculate the difference in months
+    months = (end_date.year - start_date.year) * 12 + end_date.month - start_date.month
+
+    return months
+
+# Example usage:
+start_date_str = "2022-01-01"
+end_date_str = "2023-11-30"
+
+result = months_between_dates(start_date_str, end_date_str)
+
+print(f"Number of months between {start_date_str} and {end_date_str}: {result} months")
+
+
+#calculate age :
+
+
+from datetime import datetime
+# Input the birthdate as a string in the "YYYY-MM-DD" format
+birthdate_str = input("Enter your birthdate (YYYY-MM-DD): ")
+# Convert the input string to a datetime object
+birthdate = datetime.strptime(birthdate_str, "%Y-%m-%d")
+# Get the current date
+current_date = datetime.now()
+# Calculate the age by subtracting the birthdate from the current date
+age = current_date.year - birthdate.year - ((current_date.month, current_date.day) <
+(birthdate.month, birthdate.day))
+# Print the age
+print(f"Your age is {age} years.")

@@ -1,0 +1,49 @@
+#last n lines
+
+def last_n_lines(fname,n):
+    with open(fname)as f:
+        data=f.readlines()
+        flen=len(data)
+        fn=(flen-n)
+        for i in range(fn,flen):
+                print("Line ",i," : ",data[i])
+
+file='lines.txt'
+last_n_lines(file,5)
+        
+#File length
+
+def file_length(fname):
+        with open(fname) as f:
+                data=f.readlines()
+                flen=len(data)
+                for i in range(flen):
+                        print(data[i])
+        return flen
+print("Number of lines in the file: ",file_length("lines.txt"))
+
+#count words
+
+def count_words(filepath):
+   with open(filepath) as f:
+      data = f.readlines()
+      count=0
+      for i in range(len(data)):
+         count+= len(data[i].split(" "))
+         print(data[i])
+      print("Number of words in this file are: ",count)
+
+file=input("Enter the file path: ")
+count_words(file)
+
+#Writing in csv
+
+import csv
+data = [[10,'a1', 1], [12,'a2', 3], [14, 'a3', 5], [16, 'a4', 7], [18, 'a5', 9]]
+with open("temp.csv", "w", newline="") as f:
+   writer = csv.writer(f)
+   writer.writerows(data)
+with open('temp.csv', newline='') as csvfile:
+   data = csv.reader(csvfile, delimiter=' ')
+   for row in data:
+      print(', '.join(row))

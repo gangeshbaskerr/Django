@@ -1,0 +1,151 @@
+BOOK_TICKET.HTML:
+
+<!-- ticket/book_ticket.html -->
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Book Ticket</button>
+</form>
+
+
+BOOKING_FAILURE.HTML:
+
+<!-- ticket/booking_failure.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Booking Failure</title>
+</head>
+<body>
+    <h1>Booking Failed</h1>
+    <p>Sorry, your booking has failed. Please check the availability of seats or try again later.</p>
+</body>
+</html>
+
+
+BOOKING_SECCUSS.HTML:
+
+<!-- ticket/booking_success.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Booking Success</title>
+</head>
+<body>
+    <h1>Booking Successful!</h1>
+    <p>Your ticket has been booked successfully.</p>
+    <p>Total Ticket Cost: ${{ ticket_cost }}</p>
+</body>
+</html>
+
+
+FRONT_PAGE.HTML:
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Welcome to ABC Travels</title>
+</head>
+<body>
+    <h1>Welcome to ABC Travels</h1>
+    <p>Book your bus tickets online!</p>
+
+    <!-- Hyperlink to the booking page -->
+    <a href="/book">Book Tickets</a>
+</body>
+</html>
+
+
+MODELS.PY:
+
+from django.db import models
+
+class BusDetails(models.Model):
+    Bus_No = models.CharField(max_length=20)
+    Departure_Time = models.DateTimeField()
+    Destinations = models.CharField(max_length=200)
+    Seats_Available = models.IntegerField()
+    TicketCosts = models.CharField(max_length=200)
+
+    def _str_(self):
+        return self.Bus_No
+
+
+FORMS.PY:
+
+from django import forms
+from .models import BusDetails
+
+# forms.py
+class TicketForm(forms.Form):
+    Bus_No = forms.CharField(max_length=20)
+    Destination = forms.CharField(max_length=100)
+    No_of_Persons = forms.IntegerField()
+
+
+ADMIN.PY:
+
+from django.contrib import admin
+from .models import BusDetails
+
+admin.site.register(BusDetails)
+
+
+VIEWS.PY:
+
+from django.shortcuts import render
+from .forms import TicketForm
+from .models import BusDetails
+
+
+def book_ticket(request):
+    if request.method == 'POST':
+        form = TicketForm(request.POST)
+        if form.is_valid():
+            bus = form.cleaned_data['Bus_No']
+            destination = form.cleaned_data['Destination']
+            persons = form.cleaned_data['No_of_Persons']
+
+            try:
+                bus_details = BusDetails.objects.get(Bus_No=bus)
+                if bus_details.Seats_Available >= persons:
+                    bus_details.Seats_Available -= persons
+                    bus_details.save()
+                    ticket_cost = calculate_ticket_cost(bus_details, destination, persons)
+                    return render(request, 'booking_success.html', {'ticket_cost': ticket_cost})
+                else:
+                    return render(request, 'booking_failure.html')
+            except BusDetails.DoesNotExist:
+                return render(request, 'booking_failure.html')
+    else:
+        form = TicketForm()
+
+    return render(request, 'book_ticket.html', {'form': form})
+
+
+def calculate_ticket_cost(bus_details, destination, persons):
+    destinations = bus_details.Destinations.split(',')
+    ticket_costs = list(map(int, bus_details.TicketCosts.split(',')))
+
+    index = destinations.index(destination)
+    return ticket_costs[index] * persons
+
+def show_front(request):
+    return render(request, 'front_page.html')
+
+URLS.PY:
+
+from django.urls import path
+from . import views
+
+urlpatterns = [
+    path('book/', views.book_ticket, name='book_ticket'),
+    path('',views.show_front,name='showfront'),
+    path('calculate/',views.calculate_ticket_cost,name='calculate')
+]

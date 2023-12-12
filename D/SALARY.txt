@@ -1,0 +1,146 @@
+CREATE CSV.PY(SEPERATE PYTHON FILE):
+
+import csv
+import os
+
+# Specify the path where you want to create the CSV file
+file_path = 'D:/S5/PYTHON LAB/textttt.csv'
+
+# Data to be written to the CSV file
+data = [
+    ["Name", "Status", "Income", "FD_List", "Asset_Value_Dict"],
+    ["AAA", "Professional", 800000, [1200000, 45000, 300000, 200000], {"House": 4500000, "Car": 600000, "Land": 4000000, "Jewels": 1000000}],
+    ["BBB", "Politician", 10000000, [2000000, 1000000, 25000000], {"House": 30000000, "Car": 2000000, "Land": 100000000, "Jewels": 25000000}],
+    ["CCC", "Employee", 700000, [500000, 20000000, 150000], {"House": 1000000, "Jewels": 250000}]
+]
+
+# Writing to the CSV file
+with open(file_path, 'w', newline='') as csvfile:
+    csvwriter = csv.writer(csvfile)
+    csvwriter.writerows(data)
+
+print(f"CSV file created successfully at: {file_path}")
+
+
+HOME.HTML:
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Person Status</title>
+</head>
+<body>
+    <h1>PERSON STATUS</h1>
+    <div>
+        <center><p><a href="/mcandidate">CANDIDATURE CHECK</a></p></center>
+    </div>
+</body>
+</html>
+
+
+MCANDIDATE.HTML:
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Candidature Check</title>
+</head>
+<body>
+    <h1>Candidature Check Results</h1>
+    {% for message in messages %}
+        <p>{{ message }}</p>
+    {% endfor %}
+</body>
+</html>
+
+
+MODELS.PY:
+
+from django.db import models
+
+class Income(models.Model):
+    STATUS = [
+        ('Professional', 'Professional'),
+        ('Politician', 'Politician'),
+        ('Employee', 'Employee'),
+    ]
+
+    name = models.CharField(max_length=100)
+    income = models.DecimalField(max_digits=8, decimal_places=0)
+    totDepositValue = models.DecimalField(max_digits=8, decimal_places=3)
+    totAssetValue = models.DecimalField(max_digits=8, decimal_places=3)
+    status = models.CharField(max_length=20, choices=STATUS)
+
+    def __str__(self):
+        return self.name
+
+
+VIEWS.PY:
+
+
+from django.shortcuts import render
+import csv
+
+def home(request):
+    return render(request,"home.html")
+
+def createCand_List(file_path):
+    candidate_list = []
+    with open(file_path, newline='', encoding='utf-8') as csvfile:
+        reader = csv.DictReader(csvfile)
+        for row in reader:
+            name = row['Name']
+            status = row['Status']
+            income = int(row['Income'])
+            fd_list = [int(x) for x in row['FD_List'].strip('[]').split(',')]
+            asset_value_dict = eval(row['Asset_Value_Dict'])  # Convert string representation to dictionary
+            person = Person(name, status, income, fd_list, asset_value_dict)
+            candidate_list.append(person)
+    return candidate_list
+
+class Person:
+    def __init__(self, name, status, income, fd_list, asset_value_dict):
+        self.name = name
+        self.status = status
+        self.income = income
+        self.total_deposits = sum(fd_list)
+        self.total_assets = sum(asset_value_dict.values())
+
+    def check_candidature(self):
+        if (
+            (self.status == 'Professional' and (self.total_deposits > 10 * self.income or self.total_assets > 25 * self.income))
+            or (self.status == 'Politician' and (self.total_deposits > 10 * self.income and self.total_assets > 10 * self.income))
+            or (self.status == 'Employee' and (self.total_deposits > 20 * self.income or self.total_assets > 20 * self.income))
+        ):
+            raise ValueError("IT Raid Alert" if self.status == 'Professional' else "Disproportionate Assets Alert" if self.status == 'Politician' else "Scam Alert")
+
+    def __str__(self):
+        return f"{self.name}, {self.status}, {self.income}, {self.total_deposits}, {self.total_assets}"
+
+
+def mcandidate(request):
+    file_path = "D:/S5/PYTHON LAB/textttt.csv"
+    candidate_list = createCand_List(file_path)
+    messages = []
+
+    for c in candidate_list:  # Change the loop variable name
+        try:
+            c.check_candidature()
+            messages.append(f"Good: {str(c)}")
+        except ValueError as e:
+            messages.append(f"Alert: {e}")
+
+    return render(request, 'mcandidate.html', {'messages': messages})
+
+
+URLS.PY:
+
+from django.urls import path
+from . import views
+
+urlpatterns = [
+    path('', views.home, name='home'),
+    path('mcandidate/', views.mcandidate, name='mcandidate'),
+]

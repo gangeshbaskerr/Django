@@ -1,0 +1,172 @@
+BASE.HTML:
+
+<!-- staff/templates/base.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}University Staff Management{% endblock %}</title>
+</head>
+<body>
+    <header>
+        <h1>{% block header %}University Staff Management{% endblock %}</h1>
+        <nav>
+            <ul>
+                <li><a href="{% url 'new_staff' %}">New Staff</a></li>
+                <li><a href="{% url 'search_staff' %}">Search Staff</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+    <footer>
+        <p>&copy; 2023 University Staff Management</p>
+    </footer>
+</body>
+</html>
+
+
+NEW_STAFF.HTML:
+
+<!-- staff/templates/new_staff.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>New Staff</h2>
+<form method="post" action="">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Add Staff</button>
+</form>
+{% endblock %}
+
+
+SEARCH_STAFF.HTML:
+
+<!-- staff/templates/search_staff.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Search Staff</h2>
+<form method="post" action="{% url 'search_staff' %}">
+    {% csrf_token %}
+    <label for="department">Department:</label>
+    <input type="text" name="department" required>
+    <label for="name">Name:</label>
+    <input type="text" name="name">
+    <button type="submit">Search</button>
+</form>
+{% if staff_list %}
+<h3>Staff List</h3>
+<ul>
+    {% for staff in staff_list %}
+    <li>{{ staff.name }} - {{ staff.department }} - <a href="{% url 'delete_staff' staff.staff_id %}">Delete</a> - <a href="{% url 'update_staff' staff.staff_id %}">Update</a></li>
+    {% endfor %}
+</ul>
+{% endif %}
+{% endblock %}
+
+
+UPDATE_STAFF.HTML:
+
+<!-- staff/templates/update_staff.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Update Staff</h2>
+<form method="post" action="">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Update Staff</button>
+</form>
+{% endblock %}
+
+MODELS.PY:
+
+from django.db import models
+class Staff(models.Model):
+    staff_id = models.CharField(max_length=20, unique=True)
+    name = models.CharField(max_length=100)
+    age = models.IntegerField()
+    mobile_no = models.CharField(max_length=15)
+    email_id = models.EmailField()
+    department = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.name
+
+ADMIN.PY:
+
+from django.contrib import admin
+from .models import Staff
+
+# Register your models here.
+admin.site.register(Staff)
+
+FORMS.PY:
+
+# staff/forms.py
+from django import forms
+from .models import Staff
+
+class StaffForm(forms.ModelForm):
+    class Meta:
+        model = Staff
+        fields = ['staff_id', 'name', 'age', 'mobile_no', 'email_id', 'department']
+
+VIEWS.PY:
+
+# staff/views.py
+from django.shortcuts import render, redirect
+from .models import Staff
+from .forms import StaffForm
+
+def new_staff(request):
+    if request.method == 'POST':
+        form = StaffForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('new_staff')
+    else:
+        form = StaffForm()
+    return render(request, 'new_staff.html', {'form': form})
+
+def search_staff(request):
+    if request.method == 'POST':
+        department = request.POST['department']
+        name = request.POST['name']
+        staff_list = Staff.objects.filter(department=department, name__icontains=name)
+        return render(request, 'search_staff.html', {'staff_list': staff_list})
+    return render(request, 'search_staff.html')
+
+def delete_staff(request, staff_id):
+    staff = Staff.objects.get(staff_id=staff_id)
+    staff.delete()
+    return redirect('search_staff')
+
+def update_staff(request, staff_id):
+    staff = Staff.objects.get(staff_id=staff_id)
+    if request.method == 'POST':
+        form = StaffForm(request.POST, instance=staff)
+        if form.is_valid():
+            form.save()
+            return redirect('search_staff')
+    else:
+        form = StaffForm(instance=staff)
+    return render(request, 'update_staff.html', {'form': form})
+
+
+URLS.PY:
+
+# staff/urls.py
+from django.urls import path
+from . import views
+
+urlpatterns = [
+    path('new/', views.new_staff, name='new_staff'),
+    path('search/', views.search_staff, name='search_staff'),
+    path('delete/<str:staff_id>/', views.delete_staff, name='delete_staff'),
+    path('update/<str:staff_id>/', views.update_staff, name='update_staff'),
+]

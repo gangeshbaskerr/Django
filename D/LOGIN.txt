@@ -1,0 +1,240 @@
+HOME.HTML:
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Gangesh Basker</title>
+</head>
+<body>
+    <h1>SHOP KART</h1>
+    <div>
+        <center><p><a href="/signup">Signup</a></p></center>
+    </div>
+    <div>
+        <center><p><a href="/login">Login</a></p></center>
+    </div>
+    <div>
+        <center><p><a href="/studentform">STUDENT FORM</a></p></center>
+    </div>
+    <div>
+        <center><p><a href="/ValidateMobile">MOBILE NUMBER VALIDATION</a></p></center>
+    </div>
+    <div>
+        <center><p><a href="/input">INPUT TO TABLE</a></p></center>
+    </div>
+</body>
+</html>
+
+LOGIN.HTML:
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>
+            Login Page
+        </title>
+    </head>
+    <body>
+            <h1>
+                <div>
+                    Login Here
+                </div>
+            </h1>
+            <form id="form1" action="/ValidateMobile/" onsubmit="return false" method="post">
+                <div>
+                    <div>
+                        <label for="username">Username : </label><br>
+                        <input type="text" id="username" name="username" placeholder="Your Username"><br>
+                    </div>
+                    <div class="sec">
+                        <label for="password">Password : </label><br>
+                        <input type="password" id="password" name="password" placeholder="Your Password (max 8 characters)" maxlength="8"><br>
+                    </div>
+                    <div>
+                        <label for="email">email : </label><br>
+                        <input type="email" id="email" name="email" placeholder="Your Email"><br>
+                    </div>
+                    <div>
+                        <label for="phone">PhoneNo. : </label><br>
+                        <input type="tel" id="phone" name="mobileTxt" value="{{mobileNo}}" placeholder="Your Phone No." maxlength="10"><br>
+                    </div>
+                    <div><br>
+                        <center><input type="submit" value="SUBMIT" onclick="formValidation()"></center>
+                    </div>
+                    <div>
+                        Status: <input type="text" name="statusTxt" value="{{status}}">
+                    </div>
+                    <div>
+                        <center><p><a href="/signup">Signup</a></p></center>
+                    </div>
+                    <div>
+                        <center><p><a href="/forgotpassword">Forgot Password</a></p></center>
+                    </div>
+                    <div>
+                        <center><p><a href="/home">HOME</a></p></center>
+                    </div>
+                </div>
+            </form>
+    </body>
+</html>
+
+SIGNUP.HTML:
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>
+            Signup Page
+        </title>
+    </head>
+    <body>
+
+            <h1>
+                <div>
+                    Signup Here
+                </div>
+            </h1>
+            <form action="/ValidateMobile/" onsubmit="return false" method="post">
+                <div>
+                    <div>
+                        <label for="firstname">First Name : </label><br>
+                        <input type="text" id="firstname" name="firstname" placeholder="Firstname"><br>
+                    </div>
+                    <div>
+                        <label for="secondname">Second Name : </label><br>
+                        <input type="text" id="secondname" name="secondname" placeholder="secondname"><br>
+                    </div>
+                <div>
+                    <label for="email">Email :    </label><br>
+                    <input type="email" id="email" name="email" placeholder="Your Email"><br>
+                </div>
+                <div>
+                    <label for="phone">PhoneNo. : </label><br>
+                    <input type="tel" id="phone" name="mobileTxt" value="{{mobileNo}}" placeholder="Your Phone No." maxlength="10"><br>
+                </div>
+                <div>
+                    <label for="username">Username : </label><br>
+                    <input type="text" id="username" name="username" placeholder="Your Username"><br>
+                </div>
+                <div>
+                    <label for="dob">Date Of Birth : </label><br>
+                    <input type="date" id="dob" name="dob" placeholder="Your Date Of Birth"><br>
+                </div>
+                <div>
+                    <label for="password">Password : </label><br>
+                    <input type="password" id="password" name="password" placeholder="Your Password(max 8 characters)" maxlength="8"><br>
+                </div>
+                <div>
+                    <label for="rpassword">Re-Enter Password : </label><br>
+                    <input type="password" id="rpassword" name="rpassword" placeholder="Re-Enter Password" maxlength="8"><br>
+                </div>
+                <div>
+                 <center><input type="submit" value="Signup" onclick = "formvalidation()"></center>
+                </div>
+                <div>
+                    <center><p><a href="/login">Login</a></p></center>
+                </div>
+                    <center><p><a href="/home">HOME</a></p></center>
+                </div>
+                <div>
+                    Status: <input type="text" name="statusTxt" value="{{status}}">
+                </div>
+            </form>
+    </body>
+</html>
+
+FORGOTPASSWORD.HTML:
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>
+            Forgot Password Page
+        </title>
+    </head>
+    <body>
+
+            <h1>
+                <div>
+                    Change Password Here
+                </div>
+            </h1>
+            <form action="" onsubmit="return false" method="post">
+                <div>
+                <div>
+                    <label for="email">email :    </label><br>
+                    <input type="email" id="email" name="email" placeholder="Your Email"><br>
+
+                </div>
+                <div>
+                    <label for="phone">PhoneNo. : </label><br>
+                    <input type="tel" id="phone" name="phone" placeholder="Your Phone No." maxlength="10"><br>
+
+                </div>
+                <div>
+                    <label for="npassword">New Password : </label><br>
+                    <input type="password" id="npassword" name="npassword" placeholder="Your Password(max 8 characters)" maxlength="8"><br>
+
+                </div>
+                <div>
+                    <label for="rnpassword">Re-Enter Password : </label><br>
+                    <input type="password" id="rnpassword" name="rnpassword" placeholder="Your Password(max 8 characters)" maxlength="8"><br>
+
+                </div>
+                <div>
+                <center>
+                    <label for="otp">OTP : </label><br>
+                    <input type="number" id="otp" name="otp" placeholder="Enter the 6-digit OTP"  max="999999"><br>
+
+                </center>
+                </div>
+                <div><br>
+                 <center><input type="submit" value="SUBMIT" onclick = "formvalidation()"></center>
+                </div>
+                <div>
+                    <center><p><a href="/login">Login</a></p></center>
+                </div>
+                </div>
+                <div>
+                    <center><p><a href="/home">HOME</a></p></center>
+                </div>
+            </form>
+    </body>
+</html>
+
+VIEWS.PY:
+
+from django.shortcuts import render
+from.models import Details
+from django.http import HttpResponse
+from django.template import loader
+
+
+def home(request):
+    return render(request,"shop/index.html")
+def login(request):
+    return render(request,'shop/login.html')
+
+def signup(request):
+    return render(request,'shop/signup.html')
+
+def forgotpassword(request):
+    return render(request,'shop/forgotpassword.html')
+
+def studentform(request):
+    return render(request,'student/studentform.html')
+
+
+URLS.PY:
+
+from django.urls import path
+from . import views
+urlpatterns = [
+    path('home/', views.home, name='home'),
+    path('login/', views.login, name='login'),
+    path('signup/', views.signup, name='signup'),
+    path('forgotpassword/', views.forgotpassword, name='forgotpassword'),
+]
+
+

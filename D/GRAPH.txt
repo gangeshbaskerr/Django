@@ -1,0 +1,69 @@
+INDEX.HTML:
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Sorted Edges</title>
+</head>
+<body>
+    <h1>Edges Sorted by Weight</h1>
+    <ul>
+        {% for edge in edges %}
+            <li>Start: {{ edge.start_vertex }}, End: {{ edge.end_vertex }}, Weight: {{ edge.weight }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
+
+MODELS.PY:
+
+from django.db import models
+
+class Edge(models.Model):
+    start_vertex = models.IntegerField()
+    end_vertex = models.IntegerField()
+    weight = models.IntegerField()
+
+GRAPH.PY:
+
+class Graph:
+    def __init__(self):
+        self.edge_list = {}
+
+    def transform_edges(self):
+        return [(start, end, weight) for (start, end), weight in self.edge_list.items()]
+
+    def sort_edges(self):
+        edge_tuples = self.transform_edges()
+        sorted_edges = sorted(edge_tuples, key=lambda x: x[2])
+        return sorted_edges
+
+VIEWS.PY:
+
+from django.shortcuts import render
+from .models import Edge
+
+
+def display_sorted_edges(request):
+    # Assuming the graph.txt file contains the correct data in the specified format
+    Edge.objects.all().delete()
+    with open('D:/S5/PYTHON LAB/graph.txt', 'r') as file:
+        n = int(file.readline().strip())
+        for _ in range(n):
+            start_vertex, end_vertex, weight = map(int,file.readline().split(','))
+            # Create and save an Edge instance
+            Edge.objects.create(start_vertex=start_vertex, end_vertex=end_vertex, weight=weight)
+
+    # Retrieve all edges from the database and order them by weight
+    edges = Edge.objects.order_by('weight')
+
+    return render(request, 'index.html', {'edges':edges})
+
+URLS.PY:
+
+from django.urls import path
+from . import views
+
+urlpatterns = [
+    path('', views.display_sorted_edges, name='display_edges'),
+]

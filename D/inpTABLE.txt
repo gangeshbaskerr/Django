@@ -1,0 +1,128 @@
+INPUT.HTML:
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+<form action="/table/" method="post">
+  {% csrf_token %}
+  <div>
+    <label for="firstname">First Name : </label><br>
+    <input type="text" id="firstname" name="firstname" placeholder="Firstname"><br>
+  </div>
+  <div>
+    <label for="secondname">Second Name : </label><br>
+    <input type="text" id="secondname" name="secondname" placeholder="secondname"><br>
+  </div>
+   <div>
+     <label for="phone">PhoneNo. : </label><br>
+     <input type="tel" id="phone" name="mobileTxt" value="{{mobileNo}}" placeholder="Your Phone No." maxlength="10"><br>
+   </div>
+  <input type="submit">
+</form>
+<p>
+<a href="/table">View Details</a>
+</p>
+<div>
+  <center><p><a href="/home">HOME</a></p></center>
+</div>
+</body>
+</html>
+
+
+TABLE.HTML:
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>DETAILS</title>
+</head>
+<body>
+    <h1>Details</h1>
+    <table border="1">
+        <tr>
+            <th>ID</th>
+            <th>First Name</th>
+            <th>Second Name</th>
+            <th>Mobile</th>
+        </tr>
+        {% for detail in formDetails %}
+            <tr>
+                <td>{{ detail.id }}</td>
+                <td>{{ detail.firstName }}</td>
+                <td>{{ detail.secondName }}</td>
+                <td>{{ detail.mobile }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+    <p>
+        <a href="/input">Back</a>
+    </p>
+    <div>
+        <center><p><a href="/home">HOME</a></p></center>
+    </div>
+</body>
+</html>
+
+
+MODELS.PY:
+
+from django.db import models
+
+class Details(models.Model):
+ firstName=models.CharField(max_length=30)
+ secondName = models.CharField(max_length=30)
+ mobile=models.PositiveIntegerField()
+
+VIEWS.PY:
+from django.shortcuts import render
+from.models import Details
+from django.http import HttpResponse
+from django.template import loader
+
+def table(request):
+    objList = []
+    template = loader.get_template('inputtotable/details.html')
+    context = {}
+
+    if request.method == "POST":
+        fn = request.POST['firstname']
+        sn = request.POST['secondname']
+        mob = request.POST['mobileTxt']
+        obj = Details()
+        obj.firstName = fn
+        obj.secondName = sn
+        obj.mobile = mob
+        obj.save()
+
+        formDetails = Details.objects.all().values()
+        for i in formDetails:
+            objList.append(i)
+
+        context = {
+            'formDetails': formDetails,
+        }
+
+    print("objList:", objList)  # Add this line for debugging
+    print("context:", context)  # Add this line for debugging
+
+    return HttpResponse(template.render(context, request))
+
+
+def input(request):
+    return render(request,'inputtotable/input.html')
+
+
+URLS.PY:
+
+from django.urls import path
+from . import views
+urlpatterns = [
+	path('input/', views.input, name='input'),
+	path('table/', views.table, name='table'),
+]

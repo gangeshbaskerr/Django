@@ -1,0 +1,65 @@
+STUDENT FORM.HTML:
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>STUDENT DETAILS</title>
+</head>
+<body>
+  <form action= "/transferToFile/" method="POST">
+    {% csrf_token %}
+    <h1> Save the following Details on File </h1><br>
+    Regno: <input type="text" name="txtRegno"><br><br>
+    Name : <input type="text" name="txtName"><br><br>
+    Mark1: <input type="text" name="txtMark1"><br><br>
+    Mark2: <input type="text" name="txtMark2"><br><br>
+    status: <input type="text" name="tstatus" value="{{tstatus}}"><br><br>
+    <input type="submit" value="Save to File">
+    <input type="text" name="status" value="{{status}}">
+  </form>
+  <a href= "/home">HOME</a>
+</body>
+</html>
+
+VIEWS.PY:
+
+from django.shortcuts import render
+from.models import Details
+from django.http import HttpResponse
+from django.template import loader
+
+def studentform(request):
+    return render(request,'student/studentform.html')
+
+def transferToFile(request):
+    sname = request.POST['txtName']
+    regno = request.POST['txtRegno']
+    mark1 = int(request.POST['txtMark1'])
+    mark2 = int(request.POST['txtMark2'])
+    content = f"{sname},{regno},total Marks:{mark1 + mark2}\n"
+    with open("D:/S5/PYTHON LAB/text.txt", "a") as outfile:
+        outfile.write(content)
+        status = 'Content Saved on File'
+        val=oddEven(mark1)
+        content = {
+            'status': status,
+            'tstatus': val }
+    return render(request, 'student/studentform.html', content)
+
+def oddEven(m):
+    if m%2==0 :
+        val='Even'
+    else:
+        val='odd'
+    return val
+
+
+URLS.PY:
+
+from django.urls import path
+from . import views
+urlpatterns = [
+	path('studentform/', views.studentform, name='studentform'),
+    	path('transferToFile/', views.transferToFile, name='transferToFile'),
+]
