@@ -1,0 +1,105 @@
+#String manipulation
+
+def reverseCase(string): 
+    s=string.swapcase()
+    print("The modified string is: {}".format(s))
+
+def remVowels(string):
+    vowels='aeiouAEIOU'
+    s=""
+    for i in string:
+            if i not in vowels:
+                s+=i
+    print("The modified string is: {}".format(s))
+
+def remDuplicate(string):
+    s=""
+    for i in string:
+        if i not in s:
+            s+=i
+    print("The modified string is: {}".format(s))
+    
+def compareStr(prev,curr):
+    if(prev == curr):
+        print(" Both {} and {} match.".format(prev,curr))
+    else:
+        print(" Both {} and {} don't match.".format(prev,curr))
+
+
+n=int(input("Enter the number of strings: "))
+s=[]
+for i in range(0,n):
+    string=input("Enter string: ")
+    s.append(string)
+    print()
+    print("Reversing the case :")
+    print("The original string is {}".format(string))
+    reverseCase(string)
+    print()
+    print("Removing the vowels :")
+    print("The original string is {}".format(string))
+    remVowels(string)
+    print()
+    print("Removing duplicate characters :")
+    print("The original string is {}".format(string))
+    remDuplicate(string)
+    print()
+    if(i!=0):   # 0th String can't be compared to previous one
+        print("Comparing the strings :")
+        print("The original string is {}".format(string))
+        compareStr(s[i-1],s[i])
+        print()
+    
+#check password
+
+def check_password(pw):
+        flag=0                                  # FLAG = 0 for initially TRUE
+        if (len(pw)<8 and len(pw)>20):          # Checking length of the password
+            flag=1
+        count_digits,prev=0,''
+        arr = ['0', '1', '2', '3','4', '5', '6', '7', '8', '9']
+        for i in pw:                            # Checking for consecutive digits
+            if i in arr:
+                count_digits +=1
+                if prev in arr:
+                    flag=1
+                    print("Consecutive characters are digits.")
+            prev=i
+        if count_digits < 2:
+            flag=1
+            print("Less than two digits.")
+
+        count_special = 0
+        arr = ['*','$','#']
+        for i in pw:                            # Checking for special characters
+            if i in arr:
+                count_special += 1
+                break
+        if count_special < 1 :
+            flag=1
+            print("No special characters present.")
+
+        count_upper = 0
+        for i in range(65, 91):      
+            if chr(i) in pw:                    # Checking for uppercase characters
+                count_upper += 1
+        if (count_upper < 1):
+            flag=1
+            print("No uppercase characters present.")
+
+        count_lower = 0
+        for i in range(97, 123):                # Checking for lowercase characters
+            if chr(i) in pw:
+                count_lower += 1
+        if (count_lower < 1 ):
+            flag=1
+            print("No lowercase characters present.")
+        
+        if(flag==0):                            # Checking for FLAG variable
+            print("The password {} is valid.".format(pw))
+        else:
+            print() 
+            print("The password {} is invalid.".format(pw))
+pw=input("Enter the password: ")
+check_password(pw)
+
