@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>DETAILS</title>
+</head>
+<body>
+    <h1>Details</h1>
+    <table border="1">
+        <tr>
+            <th>ID</th>
+            <th>First Name</th>
+            <th>Second Name</th>
+            <th>Mobile</th>
+        </tr>
+        {% for detail in formDetails %}
+            <tr>
+                <td>{{ detail.id }}</td>
+                <td>{{ detail.firstName }}</td>
+                <td>{{ detail.secondName }}</td>
+                <td>{{ detail.mobile }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+    <p>
+        <a href="/input">Back</a>
+    </p>
+    <div>
+        <center><p><a href="/home">HOME</a></p></center>
+    </div>
+</body>
+</html>

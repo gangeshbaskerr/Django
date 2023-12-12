@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>
+            Login Page
+        </title>
+    </head>
+    <body>
+            <h1>
+                <div>
+                    Login Here
+                </div>
+            </h1>
+            <form id="form1" action="/ValidateMobile/" onsubmit="return false" method="post">
+                <div>
+                    <div>
+                        <label for="username">Username : </label><br>
+                        <input type="text" id="username" name="username" placeholder="Your Username"><br>
+                    </div>
+                    <div class="sec">
+                        <label for="password">Password : </label><br>
+                        <input type="password" id="password" name="password" placeholder="Your Password (max 8 characters)" maxlength="8"><br>
+                    </div>
+                    <div>
+                        <label for="email">email : </label><br>
+                        <input type="email" id="email" name="email" placeholder="Your Email"><br>
+                    </div>
+                    <div>
+                        <label for="phone">PhoneNo. : </label><br>
+                        <input type="tel" id="phone" name="mobileTxt" value="{{mobileNo}}" placeholder="Your Phone No." maxlength="10"><br>
+                    </div>
+                    <div><br>
+                        <center><input type="submit" value="SUBMIT" onclick="formValidation()"></center>
+                    </div>
+                    <div>
+                        Status: <input type="text" name="statusTxt" value="{{status}}">
+                    </div>
+                    <div>
+                        <center><p><a href="/signup">Signup</a></p></center>
+                    </div>
+                    <div>
+                        <center><p><a href="/forgotpassword">Forgot Password</a></p></center>
+                    </div>
+                    <div>
+                        <center><p><a href="/home">HOME</a></p></center>
+                    </div>
+                </div>
+            </form>
+    </body>
+</html>

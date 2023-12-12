@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Mobile NUmber Validation</title>
+</head>
+<body>
+<form action="/ValidateMobile/" method="POST">
+    {% csrf_token %}
+    mobile No: <input type="text" name="mobileTxt" value="{{mobileNo}}">
+    Status: <input type="text" name="statusTxt" value="{{status}}">
+    <input type="submit" value="Validate">
+    <div>
+        <center><p><a href="/home">HOME</a></p></center>
+    </div>
+</form>
+</body>
+</html>

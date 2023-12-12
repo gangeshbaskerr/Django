@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>
+            Signup Page
+        </title>
+    </head>
+    <body>
+
+            <h1>
+                <div>
+                    Signup Here
+                </div>
+            </h1>
+            <form action="/ValidateMobile/" onsubmit="return false" method="post">
+                <div>
+                    <div>
+                        <label for="firstname">First Name : </label><br>
+                        <input type="text" id="firstname" name="firstname" placeholder="Firstname"><br>
+                    </div>
+                    <div>
+                        <label for="secondname">Second Name : </label><br>
+                        <input type="text" id="secondname" name="secondname" placeholder="secondname"><br>
+                    </div>
+                <div>
+                    <label for="email">Email :    </label><br>
+                    <input type="email" id="email" name="email" placeholder="Your Email"><br>
+                </div>
+                <div>
+                    <label for="phone">PhoneNo. : </label><br>
+                    <input type="tel" id="phone" name="mobileTxt" value="{{mobileNo}}" placeholder="Your Phone No." maxlength="10"><br>
+                </div>
+                <div>
+                    <label for="username">Username : </label><br>
+                    <input type="text" id="username" name="username" placeholder="Your Username"><br>
+                </div>
+                <div>
+                    <label for="dob">Date Of Birth : </label><br>
+                    <input type="date" id="dob" name="dob" placeholder="Your Date Of Birth"><br>
+                </div>
+                <div>
+                    <label for="password">Password : </label><br>
+                    <input type="password" id="password" name="password" placeholder="Your Password(max 8 characters)" maxlength="8"><br>
+                </div>
+                <div>
+                    <label for="rpassword">Re-Enter Password : </label><br>
+                    <input type="password" id="rpassword" name="rpassword" placeholder="Re-Enter Password" maxlength="8"><br>
+                </div>
+                <div>
+                 <center><input type="submit" value="Signup" onclick = "formvalidation()"></center>
+                </div>
+                <div>
+                    <center><p><a href="/login">Login</a></p></center>
+                </div>
+                    <center><p><a href="/home">HOME</a></p></center>
+                </div>
+                <div>
+                    Status: <input type="text" name="statusTxt" value="{{status}}">
+                </div>
+            </form>
+    </body>
+</html>

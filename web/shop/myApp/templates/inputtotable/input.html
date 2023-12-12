@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+<form action="/table/" method="post">
+  {% csrf_token %}
+  <div>
+    <label for="firstname">First Name : </label><br>
+    <input type="text" id="firstname" name="firstname" placeholder="Firstname"><br>
+  </div>
+  <div>
+    <label for="secondname">Second Name : </label><br>
+    <input type="text" id="secondname" name="secondname" placeholder="secondname"><br>
+  </div>
+   <div>
+     <label for="phone">PhoneNo. : </label><br>
+     <input type="tel" id="phone" name="mobileTxt" value="{{mobileNo}}" placeholder="Your Phone No." maxlength="10"><br>
+   </div>
+  <input type="submit">
+</form>
+<p>
+<a href="/table">View Details</a>
+</p>
+<div>
+  <center><p><a href="/home">HOME</a></p></center>
+</div>
+</body>
+</html>
