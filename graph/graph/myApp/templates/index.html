@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Sorted Edges</title>
+</head>
+<body>
+    <h1>Edges Sorted by Weight</h1>
+    <ul>
+        {% for edge in edges %}
+            <li>Start: {{ edge.start_vertex }}, End: {{ edge.end_vertex }}, Weight: {{ edge.weight }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
