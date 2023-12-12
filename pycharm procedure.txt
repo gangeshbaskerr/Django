@@ -1,0 +1,112 @@
+django-admin startproject app
+cd app
+django-admin startapp myApp
+python manage.py migrate
+python manage.py runserver
+
+create urls.py under myApp
+create a folder 'templates' under myApp
+go to settings.py add your appname 'myApp' in the INSTALLED_APPS
+
+open app/urls.py:
+
+	1.from django.urls import path, include
+	2.path('', include('myApp.urls')),
+
+open myApp/urls.py:
+
+	from django.urls import path
+	from . import views
+	urlpatterns = [
+    		path('home/', views.home, name='home'),
+    		path('login/', views.login, name='login'),
+    		path('signup/', views.signup, name='signup'),
+	]
+
+open views.py:
+
+	from django.shortcuts import render
+	from .models import Details
+	from django.http import HttpResponse
+	from django.template import loader
+	def home(request):
+    		return render(request,"shop/index.html")
+	def login(request):
+    		return render(request,'shop/login.html')
+
+open models.py :
+
+from django.db import models
+
+class Details(models.Model):
+	firstName=models.CharField(max_length=30)
+ 	secondName = models.CharField(max_length=30)
+ 	mobile=models.PositiveIntegerField()
+
+terminal:
+	python manage.py makemigrations myApp
+	python manage.py migrate myApp
+
+shell in terminal :
+
+	python manage.py shell
+	from myApp.models import Details
+	Details.objects.all().values()
+	member = Details (firstName=’LP’,secondName='pp', mobile =9894930946)
+	member.save()
+	Details.objects.all().values()
+
+to load a template html file :
+
+	crete a view:
+		def signup(request):
+    			return render(request,'shop/signup.html')
+		def ValidateMobile(request):
+    			context={}
+    			if request.method == "POST":
+        			mobilenumber = request.POST['mobileTxt']
+        			if len(mobilenumber) == 10:
+            				status = 'valid Number'
+        			else:
+            				status = 'invalid Number'
+        			context = {
+            				'status': status,
+            				'mobileNo': mobilenumber
+        			}
+    			return render(request, 'mobilenumber/mobilenumber.html', context)
+
+		def table(request):
+    			objList = []
+    			template = loader.get_template('inputtotable/details.html')
+    			context = {}
+
+    			if request.method == "POST":
+        			fn = request.POST['firstname']
+        			sn = request.POST['secondname']
+        			mob = request.POST['mobileTxt']
+        			obj = Details()
+        			obj.firstName = fn
+        			obj.secondName = sn
+        			obj.mobile = mob
+        			obj.save()
+
+        			formDetails = Details.objects.all().values()
+        			for i in formDetails:
+            				objList.append(i)
+
+        			context = {
+            				'formDetails': formDetails,
+        			}
+
+    			print("objList:", objList)  # Add this line for debugging
+    			print("context:", context)  # Add this line for debugging
+
+    			return HttpResponse(template.render(context, request))
+	
+	load the views created in urls.py:
+		path('signup/', views.signup, name='signup'),
+		path('ValidateMobile/', views.ValidateMobile, name='ValidateMobile'),
+		path('table/', views.table, name='table'),
+		
+
+
